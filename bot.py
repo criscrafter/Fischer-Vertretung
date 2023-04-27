@@ -31,7 +31,7 @@ async def on_message(message):
         # Get the second element (index 1) of the words list
         className = messageData[1].upper()
 
-    if message.content.startswith('!Vertretungsplan'):
+    if message.content.lower().startswith('!vertretungsplan') or message.content.lower().startswith('!vp'):
         response = requests.post(url, data=data)
         soup = BeautifulSoup(response.text, 'html.parser')
 
