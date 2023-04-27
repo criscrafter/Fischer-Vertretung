@@ -4,6 +4,9 @@ FROM python:alpine3.17
 # Set working directory
 WORKDIR /app
 
+# Create the archiv directory
+RUN mkdir archiv
+
 # Copy the requirements file into the container
 COPY requirements.txt .
 
