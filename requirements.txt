@@ -1,4 +1,4 @@
 discord
 requests
 datetime
-BeautifulSoup
+beautifulsoup4
