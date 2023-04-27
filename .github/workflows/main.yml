@@ -2,13 +2,14 @@ name: Build and Publish Docker Container
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  
+    - uses: actions/checkout@v3
 
       
     - name: Docker Login
@@ -23,3 +24,9 @@ jobs:
         context: .
         push: true
         tags: criscrafter/Fischer-Vertretung:latest
+      
+    - name: Upload bot.py artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: bot.py
+        path: ./bot.py
