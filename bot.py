@@ -24,15 +24,23 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+    
+    className = '10A'
+    messageData = message.content.split()
+    if len(messageData) > 1:
+        # Get the second element (index 1) of the words list
+        className = messageData[1].upper()
 
     if message.content.startswith('!Vertretungsplan'):
         response = requests.post(url, data=data)
         soup = BeautifulSoup(response.text, 'html.parser')
 
+
         if response.status_code == 200:
             now = datetime.now()
-            timestamp = now.strftime('%d.%m.%Y %H:%M').replace(':', '_')
-            filename = f'Vertretungsplan {timestamp}.html'
+            timestamp = now.strftime('%d.%m.%Y %H_%M')
+            
+            filename = f'archiv/Vertretungsplan {timestamp}.html'
 
             with open(filename, 'w', encoding='utf-8') as f:
                 f.write(response.text)
@@ -59,28 +67,20 @@ async def on_message(message):
                 for row in rows[1:]:  # skip the header row
                     # check if the row has at least two columns
                     cells = row.find_all("td")
-                    if len(cells) == 6:
-                        # get the class, hour, subject, teacher, and info from the table cells
-                        klass = cells[0].text.strip()
-                        hour = cells[1].text.strip()
-                        subject = cells[2].text.strip()
-                        teacher = cells[3].text.strip()
-                        classroom = cells[4].text.strip()
-                        info = cells[5].text.strip()
+                    if len(cells) != 6:
+                        continue
+                    # get the class, hour, subject, teacher, and info from the table cells
+                    klass = cells[0].text.strip()
+                    hour = cells[1].text.strip()
+                    subject = cells[2].text.strip()
+                    teacher = cells[3].text.strip()
+                    classroom = cells[4].text.strip()
+                    info = cells[5].text.strip()
 
-                        # check if the row contains "10A" or "10B" in the klass variable
-                        if "10A" in klass or "10A" in klass:
-                            # format the information according to the desired output
-                            output += f"{klass:<10}|{hour:<4}|{subject:<6}|{teacher:<22}|{classroom:<4}|{info}\n"
-
-
-        # write the output to a file
-        output_filename = f'Vertretungsplan {timestamp}.txt'
-        with open(output_filename, 'w', encoding='utf-8') as f:
-            f.write(output)
-            print(f'Text file saved as "{output_filename}" successfully')
-
-        print(output)
+                    # check if the row contains "10A" or "10B" in the klass variable
+                    if className in klass:
+                        # format the information according to the desired output
+                        output += f"{klass:<10}|{hour:<4}|{subject:<6}|{teacher:<22}|{classroom:<4}|{info}\n"
 
         # send the output as a message
         await message.channel.send(f'```{output}```')
