@@ -1,0 +1,5 @@
+discord
+requests
+os
+datetime
+BeautifulSoup
