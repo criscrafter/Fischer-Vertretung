@@ -18,12 +18,13 @@ client = discord.Client(command_prefix='!', intents=intents)
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    print("Found username: " + os.getenv('username'))
+    print("Found username: " + os.getenv('username'))    
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
+    await message.channel.send('cum')
     
     className = '10A'
     messageData = message.content.split()
