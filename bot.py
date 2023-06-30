@@ -24,7 +24,6 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    await message.channel.send('cum')
     
     className = '10A'
     messageData = message.content.split()
